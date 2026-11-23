@@ -111,10 +111,6 @@ p{
   border:2px solid #ffc0d6;
 }
 
-.btn.dark{
-  background:#7c3d5c;
-}
-
 .bouquet{
   font-size:130px;
   filter:drop-shadow(0 12px 18px #b94c78);
@@ -165,13 +161,6 @@ p{
   margin-bottom:8px;
 }
 
-.game{
-  background:#fff1f7;
-  border-radius:24px;
-  padding:18px;
-  margin-top:15px;
-}
-
 .message{
   background:#fff;
   padding:20px;
@@ -186,6 +175,7 @@ p{
   bottom:-30px;
   pointer-events:none;
   animation:float 5s linear forwards;
+  z-index:-1;
 }
 
 @keyframes float{
@@ -221,8 +211,7 @@ p{
   color:#ff4f91;
 }
 
-.quiz button,
-.answers button{
+.quiz button{
   margin:7px 0;
 }
 
@@ -241,13 +230,6 @@ input{
   font-weight:800;
   margin-top:10px;
   min-height:24px;
-}
-
-.back{
-  margin-top:14px;
-  background:transparent;
-  color:#b63e70;
-  font-weight:800;
 }
 
 .final{
@@ -271,7 +253,6 @@ input{
 <body>
 
 <!-- WELCOME -->
-
 <div id="s1" class="screen active">
   <div class="card">
 
@@ -302,7 +283,6 @@ input{
 
 
 <!-- BOUQUET -->
-
 <div id="s2" class="screen">
   <div class="card">
 
@@ -325,7 +305,6 @@ input{
 
 
 <!-- LOADING -->
-
 <div id="s3" class="screen">
   <div class="card">
 
@@ -344,7 +323,6 @@ input{
 
 
 <!-- MAIN MENU -->
-
 <div id="s4" class="screen">
   <div class="card">
 
@@ -423,17 +401,12 @@ input{
 
 
 <!-- MESSAGE -->
-
 <div id="s5" class="screen">
   <div class="card">
 
-    <div class="icon">
-      💌
-    </div>
+    <div class="icon">💌</div>
 
-    <h2>
-      Sweet Message
-    </h2>
+    <h2>Sweet Message</h2>
 
     <div class="message">
 
@@ -456,17 +429,12 @@ input{
 
 
 <!-- BOW -->
-
 <div id="s6" class="screen">
   <div class="card">
 
-    <div class="icon">
-      🎀
-    </div>
+    <div class="icon">🎀</div>
 
-    <h2>
-      Bow Surprise
-    </h2>
+    <h2>Bow Surprise</h2>
 
     <p class="message">
 
@@ -488,7 +456,6 @@ input{
 
 
 <!-- FLOWER -->
-
 <div id="s7" class="screen">
   <div class="card">
 
@@ -496,9 +463,7 @@ input{
       🌷🌸🌹
     </div>
 
-    <h2>
-      Flower Garden
-    </h2>
+    <h2>Flower Garden</h2>
 
     <p>
       Choose a flower:
@@ -535,17 +500,12 @@ input{
 
 
 <!-- QUIZ -->
-
 <div id="s10" class="screen">
   <div class="card">
 
-    <div class="icon">
-      🧠
-    </div>
+    <div class="icon">🧠</div>
 
-    <h2>
-      TAVI Quiz
-    </h2>
+    <h2>TAVI Quiz</h2>
 
     <p>
       What is the correct answer?
@@ -578,17 +538,12 @@ input{
 
 
 <!-- MEMORY -->
-
 <div id="s11" class="screen">
   <div class="card">
 
-    <div class="icon">
-      🃏
-    </div>
+    <div class="icon">🃏</div>
 
-    <h2>
-      Memory Match
-    </h2>
+    <h2>Memory Match</h2>
 
     <p>
       Match all the cute pairs.
@@ -611,17 +566,12 @@ input{
 
 
 <!-- CATCH HEARTS -->
-
 <div id="s12" class="screen">
   <div class="card">
 
-    <div class="icon">
-      💗
-    </div>
+    <div class="icon">💗</div>
 
-    <h2>
-      Catch Hearts
-    </h2>
+    <h2>Catch Hearts</h2>
 
     <p>
       Click the floating hearts before they disappear!
@@ -655,17 +605,12 @@ input{
 
 
 <!-- FUNNY -->
-
 <div id="s13" class="screen">
   <div class="card">
 
-    <div class="icon">
-      😂
-    </div>
+    <div class="icon">😂</div>
 
-    <h2>
-      Funny Mode
-    </h2>
+    <h2>Funny Mode</h2>
 
     <div class="message" id="joke">
       Click the button for a totally serious joke.
@@ -684,17 +629,12 @@ input{
 
 
 <!-- COMPLIMENT -->
-
 <div id="s14" class="screen">
   <div class="card">
 
-    <div class="icon">
-      ✨
-    </div>
+    <div class="icon">✨</div>
 
-    <h2>
-      Compliment Box
-    </h2>
+    <h2>Compliment Box</h2>
 
     <p>
       Press the button to reveal one.
@@ -717,17 +657,12 @@ input{
 
 
 <!-- LUCKY -->
-
 <div id="s15" class="screen">
   <div class="card">
 
-    <div class="icon">
-      🍀
-    </div>
+    <div class="icon">🍀</div>
 
-    <h2>
-      Lucky Message
-    </h2>
+    <h2>Lucky Message</h2>
 
     <div id="lucky" class="message">
       Your lucky message is waiting...
@@ -746,7 +681,6 @@ input{
 
 
 <!-- FINAL -->
-
 <div id="s16" class="screen">
   <div class="card">
 
@@ -781,7 +715,6 @@ input{
 
 
 <!-- MORE -->
-
 <div id="s17" class="screen">
   <div class="card">
 
@@ -833,11 +766,15 @@ input{
 
 <script>
 
+/* PAGE NAVIGATION */
+
 function go(id){
 
   document
     .querySelectorAll('.screen')
-    .forEach(s => s.classList.remove('active'));
+    .forEach(screen => {
+      screen.classList.remove('active');
+    });
 
   document
     .getElementById(id)
@@ -845,43 +782,75 @@ function go(id){
 
   window.scrollTo(0,0);
 
+
+  /* FIXED LOADING TIME */
+
+  if(id === 's3'){
+
+    setTimeout(() => {
+      go('s4');
+    },1500);
+
+  }
+
+
+  /* START MEMORY GAME */
+
   if(id === 's11'){
     startMemory();
   }
+
 }
 
+
+/* NO THANKS BUTTON */
 
 function funnyNo(){
 
-  const x = document.getElementById('noText');
+  const text = document.getElementById('noText');
 
-  x.textContent = [
+  const messages = [
+
     "Are you sure? 😭",
+
     "The button is getting nervous...",
+
     "TAVI please reconsider 😂",
+
     "Okay okay... one more chance? 💗"
-  ][Math.floor(Math.random()*4)];
+
+  ];
+
+  text.textContent =
+    messages[Math.floor(Math.random()*messages.length)];
 
 }
 
 
-function flower(x){
+/* FLOWERS */
+
+function flower(type){
 
   document.getElementById('flowerResult').textContent =
-    x + " has been added to TAVI's imaginary garden! 🌸";
+    type +
+    " has been added to TAVI's imaginary garden! 🌸";
 
 }
 
 
-function quiz(n){
+/* QUIZ */
+
+function quiz(answer){
 
   document.getElementById('quizResult').textContent =
-    n === 0
+    answer === 0
       ? "CORRECT! Obviously. 😂💗"
       : "Nope. Try again 😭";
 
 }
 
+
+/* FUNNY MODE */
 
 const jokes = [
 
@@ -906,6 +875,8 @@ function joke(){
 }
 
 
+/* COMPLIMENT BOX */
+
 const compliments = [
 
   "You make ordinary moments feel a little brighter. ✨",
@@ -928,6 +899,8 @@ function compliment(){
 
 }
 
+
+/* LUCKY MESSAGE */
 
 const luckyMessages = [
 
@@ -952,6 +925,8 @@ function lucky(){
 }
 
 
+/* CATCH HEARTS */
+
 let score = 0;
 
 
@@ -962,11 +937,14 @@ function catchHeart(){
   document.getElementById('score').textContent =
     "Score: " + score;
 
-  const b = document.getElementById('heartBtn');
+  const button =
+    document.getElementById('heartBtn');
 
-  b.style.transform =
-    `translate(${Math.random()*100-50}px,
-               ${Math.random()*80-40}px)`;
+  button.style.transform =
+    `translate(
+      ${Math.random()*100-50}px,
+      ${Math.random()*80-40}px
+    )`;
 
   if(score >= 10){
 
@@ -990,9 +968,17 @@ function resetScore(){
 }
 
 
+/* MEMORY GAME */
+
 const symbols = [
-  "💗","🌸","🎀","🍀",
-  "💗","🌸","🎀","🍀"
+  "💗",
+  "🌸",
+  "🎀",
+  "🍀",
+  "💗",
+  "🌸",
+  "🎀",
+  "🍀"
 ];
 
 let first = null;
@@ -1006,59 +992,63 @@ function startMemory(){
   lock = false;
   matches = 0;
 
-  const arr = [...symbols]
-    .sort(() => Math.random() - .5);
+  const shuffled =
+    [...symbols].sort(
+      () => Math.random() - 0.5
+    );
 
-  const box = document.getElementById('memory');
+  const box =
+    document.getElementById('memory');
 
   box.innerHTML = "";
 
-  arr.forEach((v,i)=>{
+  document.getElementById('memoryResult').textContent = "";
 
-    const b = document.createElement('button');
+  shuffled.forEach(symbol => {
 
-    b.className = "tile";
+    const button =
+      document.createElement('button');
 
-    b.textContent = v;
+    button.className = "tile";
 
-    b.dataset.value = v;
+    button.textContent = symbol;
 
-    b.onclick = () => flip(b);
+    button.dataset.value = symbol;
 
-    box.appendChild(b);
+    button.onclick = () => flip(button);
+
+    box.appendChild(button);
 
   });
-
-  document.getElementById('memoryResult').textContent = "";
 
 }
 
 
-function flip(b){
+function flip(button){
 
   if(
     lock ||
-    b.classList.contains("open") ||
-    b.classList.contains("done")
+    button.classList.contains("open") ||
+    button.classList.contains("done")
   ){
     return;
   }
 
-  b.classList.add("open");
+  button.classList.add("open");
 
   if(!first){
 
-    first = b;
+    first = button;
 
     return;
 
   }
 
-  if(first.dataset.value === b.dataset.value){
+  if(first.dataset.value === button.dataset.value){
 
     first.classList.add("done");
 
-    b.classList.add("done");
+    button.classList.add("done");
 
     first = null;
 
@@ -1071,15 +1061,17 @@ function flip(b){
 
     }
 
-  }else{
+  }
+
+  else{
 
     lock = true;
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
       first.classList.remove("open");
 
-      b.classList.remove("open");
+      button.classList.remove("open");
 
       first = null;
 
@@ -1092,26 +1084,29 @@ function flip(b){
 }
 
 
-setInterval(()=>{
+/* FLOATING HEARTS */
 
-  const h = document.createElement("div");
+setInterval(() => {
 
-  h.className = "heart";
+  const heart =
+    document.createElement("div");
 
-  h.textContent =
+  heart.className = "heart";
+
+  heart.textContent =
     ["💗","💕","🌸","✨"]
     [Math.floor(Math.random()*4)];
 
-  h.style.left =
+  heart.style.left =
     Math.random()*100 + "vw";
 
-  h.style.fontSize =
+  heart.style.fontSize =
     (15 + Math.random()*22) + "px";
 
-  document.body.appendChild(h);
+  document.body.appendChild(heart);
 
   setTimeout(
-    () => h.remove(),
+    () => heart.remove(),
     5000
   );
 
