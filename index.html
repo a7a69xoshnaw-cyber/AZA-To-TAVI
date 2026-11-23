@@ -1,1373 +1,1123 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="utf-8">
-
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>TAVI — A Little Gift</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TAVI — Little Surprise</title>
 
 <style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap');
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+  background:linear-gradient(135deg,#ffd9e8,#fff1f7 45%,#ffc7dc);
+  color:#5b2340;
+  overflow:hidden;
+}
 
-*{box-sizing:border-box}
+button,input{
+  font:inherit;
+}
 
-html,body{margin:0;width:100%;min-height:100%;font-family:"DM Sans",sans-serif}
-
-body{background:#f8cbd1;color:#934d5a;overflow-x:hidden}
-
-button,input{font:inherit}
-
-button{cursor:pointer}
+button{
+  cursor:pointer;
+  border:0;
+}
 
 .screen{
-
-display:none;
-
-min-height:100vh;
-
-position:relative;
-
-overflow:hidden;
-
-background:
-
-radial-gradient(circle at 8% 12%,#fff7f7 0 2px,transparent 3px) 0 0/38px 38px,
-
-linear-gradient(180deg,#f8cbd1,#f7c7ce);
-
-padding:55px 18px 70px;
-
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  overflow:auto;
 }
 
 .screen.active{
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
+  display:flex;
 }
 
-.content{
-
-width:min(900px,100%);
-
-position:relative;
-
-z-index:2;
-
-text-align:center;
-
+.card{
+  width:min(440px,94vw);
+  max-height:92vh;
+  overflow:auto;
+  background:rgba(255,255,255,.82);
+  border:2px solid rgba(255,255,255,.8);
+  border-radius:32px;
+  padding:30px;
+  box-shadow:0 20px 70px rgba(130,45,85,.22);
+  text-align:center;
+  backdrop-filter:blur(15px);
 }
 
-h1,h2{
-
-font-family:"Playfair Display",serif;
-
-font-weight:600;
-
-margin:0;
-
-color:#9a4857;
-
+h1{
+  font-size:34px;
+  margin-bottom:10px;
 }
 
-h1{font-size:clamp(34px,7vw,56px)}
+h2{
+  font-size:27px;
+  margin-bottom:10px;
+}
 
-h2{font-size:clamp(30px,6vw,46px)}
-
-.sub{
-
-font-size:12px;
-
-color:#aa626d;
-
-margin-top:7px;
-
+p{
+  line-height:1.6;
 }
 
 .small{
-
-font-size:11px;
-
-color:#a45b66;
-
+  font-size:13px;
+  opacity:.72;
 }
-
-.pill{
-
-position:absolute;
-
-top:15px;
-
-right:18px;
-
-background:#ee9da9;
-
-color:white;
-
-padding:5px 11px;
-
-border-radius:20px;
-
-font-size:9px;
-
-z-index:5;
-
-}
-
-.decor-hearts{
-
-position:absolute;
-
-inset:0;
-
-pointer-events:none;
-
-z-index:1;
-
-}
-
-.decor-hearts span{
-
-position:absolute;
-
-color:white;
-
-font-size:16px;
-
-opacity:.75;
-
-}
-
-.decor-hearts span:nth-child(1){left:6%;top:15%}
-
-.decor-hearts span:nth-child(2){left:13%;top:21%}
-
-.decor-hearts span:nth-child(3){right:8%;top:18%}
-
-.decor-hearts span:nth-child(4){right:15%;top:33%}
-
-.decor-hearts span:nth-child(5){left:8%;bottom:20%}
-
-/* CAT */
 
 .cat{
-
-width:145px;
-
-height:135px;
-
-margin:12px auto 5px;
-
-position:relative;
-
+  font-size:85px;
+  animation:bounce 1.8s infinite ease-in-out;
+  margin-bottom:8px;
 }
 
-.cat .head{
-
-position:absolute;
-
-width:82px;
-
-height:67px;
-
-left:32px;
-
-top:28px;
-
-background:#fff;
-
-border:2px solid #493a3d;
-
-border-radius:48% 48% 45% 45%;
-
-}
-
-.cat .ear{
-
-position:absolute;
-
-top:13px;
-
-width:34px;
-
-height:40px;
-
-background:#fff;
-
-border:2px solid #493a3d;
-
-}
-
-.cat .e1{
-
-left:31px;
-
-transform:rotate(-28deg);
-
-border-radius:8px 22px 2px 22px;
-
-}
-
-.cat .e2{
-
-left:86px;
-
-transform:rotate(28deg);
-
-border-radius:22px 8px 22px 2px;
-
-}
-
-.cat .eye{
-
-position:absolute;
-
-top:56px;
-
-width:5px;
-
-height:7px;
-
-background:#493a3d;
-
-border-radius:50%;
-
-}
-
-.cat .a{left:55px}
-
-.cat .b{left:86px}
-
-.cat .nose{
-
-position:absolute;
-
-left:70px;
-
-top:67px;
-
-width:7px;
-
-height:5px;
-
-background:#f19aaa;
-
-border-radius:50%;
-
-}
-
-.cat .body{
-
-position:absolute;
-
-left:45px;
-
-top:91px;
-
-width:55px;
-
-height:28px;
-
-border:2px solid #493a3d;
-
-border-top:0;
-
-background:#fff;
-
-border-radius:0 0 30px 30px;
-
-}
-
-.cat .bow{
-
-position:absolute;
-
-right:17px;
-
-top:47px;
-
-font-size:25px;
-
-}
-
-.cat .motion{
-
-position:absolute;
-
-left:13px;
-
-top:25px;
-
-color:#9d626c;
-
-font-size:13px;
-
-}
-
-/* BUTTONS */
-
-.btnrow{
-
-display:flex;
-
-justify-content:center;
-
-gap:24px;
-
-margin-top:18px;
-
-flex-wrap:wrap;
-
+@keyframes bounce{
+  50%{
+    transform:translateY(-9px) rotate(2deg);
+  }
 }
 
 .btn{
-
-border:0;
-
-background:#ee8f9e;
-
-color:#fff;
-
-font-weight:700;
-
-font-size:10px;
-
-letter-spacing:.5px;
-
-border-radius:999px;
-
-padding:10px 28px;
-
-box-shadow:0 5px 14px rgba(143,60,75,.12);
-
+  display:block;
+  width:100%;
+  margin:12px 0;
+  padding:15px 18px;
+  border-radius:18px;
+  background:#ff5d99;
+  color:white;
+  font-weight:800;
+  box-shadow:0 8px 22px rgba(255,93,153,.3);
+  transition:.2s;
 }
 
-.btn.light{
-
-background:#f3aeb7;
-
+.btn:hover{
+  transform:translateY(-3px);
+  filter:brightness(1.04);
 }
 
-.btn:active{
-
-transform:scale(.97);
-
+.btn.alt{
+  background:#fff;
+  color:#d8477d;
+  border:2px solid #ffc0d6;
 }
 
-/* BOUQUET */
-
-.bouquet-card{
-
-width:min(290px,78vw);
-
-height:350px;
-
-margin:25px auto 12px;
-
-background:#f7b7c0;
-
-border:1px solid #d98e9a;
-
-border-radius:8px;
-
-box-shadow:0 12px 30px rgba(125,56,67,.13);
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
+.btn.dark{
+  background:#7c3d5c;
 }
 
 .bouquet{
-
-font-size:130px;
-
-filter:drop-shadow(0 8px 4px rgba(112,44,55,.16));
-
+  font-size:130px;
+  filter:drop-shadow(0 12px 18px #b94c78);
 }
 
-.card-caption{
-
-font-family:"Playfair Display",serif;
-
-font-size:20px;
-
-color:#984a59;
-
-}
-
-/* LOADING */
-
-.loading{
-
-font-size:26px;
-
-margin:50px 0 12px;
-
-opacity:.65;
-
-}
-
-.loading:after{
-
-content:"";
-
-display:block;
-
-width:28px;
-
-height:28px;
-
-margin:25px auto;
-
-border:2px solid #df929e;
-
-border-top-color:transparent;
-
-border-radius:50%;
-
-animation:spin 1s linear infinite;
-
+.loader{
+  width:90px;
+  height:90px;
+  border:8px solid #ffd0e0;
+  border-top-color:#ff4f91;
+  border-radius:50%;
+  margin:20px auto;
+  animation:spin 1s linear infinite;
 }
 
 @keyframes spin{
-
-to{transform:rotate(360deg)}
-
+  to{
+    transform:rotate(360deg);
+  }
 }
 
-/* MENU */
-
-.menu-grid{
-
-width:min(430px,95vw);
-
-display:grid;
-
-grid-template-columns:1fr 1fr;
-
-gap:22px;
-
-margin:35px auto;
-
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:18px;
 }
 
-.menu-card{
-
-height:125px;
-
-border:1px solid #d99aa4;
-
-background:rgba(255,235,237,.6);
-
-border-radius:12px;
-
-box-shadow:0 7px 18px rgba(130,54,65,.08);
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-transition:.2s;
-
+.option{
+  min-height:120px;
+  padding:20px;
+  border-radius:24px;
+  background:linear-gradient(145deg,#fff,#ffe5f0);
+  border:2px solid #ffd0df;
+  color:#702b4c;
+  font-weight:800;
+  box-shadow:0 8px 25px rgba(130,45,85,.1);
+  transition:.2s;
 }
 
-.menu-card:hover{
-
-transform:translateY(-3px);
-
+.option:hover{
+  transform:scale(1.03) rotate(-1deg);
 }
 
-.menu-card .ico{
-
-font-size:48px;
-
+.icon{
+  font-size:38px;
+  display:block;
+  margin-bottom:8px;
 }
 
-/* LETTER */
-
-.letter{
-
-width:min(520px,92vw);
-
-margin:35px auto 20px;
-
-background:#fff8f4;
-
-padding:34px 30px 40px;
-
-border:1px solid #e1b5aa;
-
-box-shadow:0 15px 35px rgba(94,48,44,.14);
-
-text-align:left;
-
+.game{
+  background:#fff1f7;
+  border-radius:24px;
+  padding:18px;
+  margin-top:15px;
 }
 
-.letter p{
-
-font-family:"Playfair Display",serif;
-
-font-size:12px;
-
-line-height:1.8;
-
-color:#805b58;
-
-margin:0 0 13px;
-
+.message{
+  background:#fff;
+  padding:20px;
+  border-radius:20px;
+  border:2px dashed #ff91b8;
+  font-size:18px;
+  line-height:1.7;
 }
 
-.signature{
-
-text-align:right;
-
-margin-top:20px;
-
-font-family:"Playfair Display",serif;
-
+.heart{
+  position:fixed;
+  bottom:-30px;
+  pointer-events:none;
+  animation:float 5s linear forwards;
 }
 
-/* HELLO KITTY STYLE SURPRISE */
+@keyframes float{
+  from{
+    transform:translateY(0) rotate(0);
+    opacity:1;
+  }
 
-.hello{
-
-font-size:112px;
-
-line-height:1;
-
-margin:15px auto 3px;
-
-filter:drop-shadow(0 7px 5px rgba(120,50,60,.13));
-
+  to{
+    transform:translateY(-110vh) rotate(360deg);
+    opacity:0;
+  }
 }
 
-.inputwrap{
-
-display:flex;
-
-justify-content:center;
-
-margin-top:20px;
-
+.match{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
 }
 
-.inputwrap input{
-
-width:min(250px,65vw);
-
-padding:11px 14px;
-
-border:1px solid #df9da8;
-
-border-radius:999px;
-
-background:#fff7f7;
-
-outline:none;
-
-color:#86414e;
-
-text-align:center;
-
+.tile{
+  aspect-ratio:1;
+  border-radius:15px;
+  background:#ff75a8;
+  color:transparent;
+  font-size:26px;
+  font-weight:bold;
 }
 
-.unlock{
-
-margin-top:12px;
-
+.tile.open,
+.tile.done{
+  background:white;
+  color:#ff4f91;
 }
 
-/* FUTURE PLANS */
-
-.plans{
-
-width:min(680px,95vw);
-
-margin:30px auto;
-
+.quiz button,
+.answers button{
+  margin:7px 0;
 }
 
-.plan{
-
-display:flex;
-
-align-items:center;
-
-gap:18px;
-
-background:#f4aeb8;
-
-border:1px solid #d98d99;
-
-border-radius:10px;
-
-padding:16px;
-
-margin:13px 0;
-
-box-shadow:0 8px 18px rgba(117,48,60,.08);
-
+input{
+  width:100%;
+  padding:15px;
+  border-radius:16px;
+  border:2px solid #ffc2d6;
+  outline:none;
+  margin:10px 0;
+  background:white;
+  color:#5b2340;
 }
 
-.plan .heart{
-
-width:48px;
-
-height:48px;
-
-display:grid;
-
-place-items:center;
-
-background:#f8c9cf;
-
-border-radius:50%;
-
-font-size:24px;
-
+.result{
+  font-weight:800;
+  margin-top:10px;
+  min-height:24px;
 }
 
-.plan h3{
-
-font-family:"Playfair Display",serif;
-
-margin:0;
-
-color:#914654;
-
-font-size:18px;
-
+.back{
+  margin-top:14px;
+  background:transparent;
+  color:#b63e70;
+  font-weight:800;
 }
 
-.plan p{
-
-margin:4px 0 0;
-
-font-size:11px;
-
-color:#8d5960;
-
+.final{
+  font-size:60px;
+  animation:wiggle 1.2s infinite;
 }
 
-.home{
-
-position:fixed;
-
-bottom:14px;
-
-left:50%;
-
-transform:translateX(-50%);
-
-z-index:30;
-
-background:#fff4f5;
-
-border:1px solid #df9ca7;
-
-color:#9a4a58;
-
-border-radius:999px;
-
-padding:8px 18px;
-
-font-size:10px;
-
-display:none;
-
+@keyframes wiggle{
+  50%{
+    transform:rotate(8deg) scale(1.05);
+  }
 }
 
-.home.show{
-
-display:block;
-
+.sparkle{
+  font-size:26px;
+  letter-spacing:8px;
 }
-
-.fade{
-
-animation:fade .55s ease;
-
-}
-
-@keyframes fade{
-
-from{
-
-opacity:0;
-
-transform:translateY(8px);
-
-}
-
-to{
-
-opacity:1;
-
-transform:none;
-
-}
-
-}
-
-@media(max-width:520px){
-
-.screen{
-
-padding-top:48px;
-
-}
-
-.menu-grid{
-
-gap:12px;
-
-}
-
-.menu-card{
-
-height:110px;
-
-}
-
-.letter{
-
-padding:28px 22px 34px;
-
-}
-
-}
-
 </style>
-
 </head>
 
 <body>
 
-<div class="decor-hearts">
+<!-- WELCOME -->
 
-<span>♡</span>
+<div id="s1" class="screen active">
+  <div class="card">
 
-<span>♡</span>
+    <div class="cat">🐱</div>
 
-<span>♡</span>
+    <div class="sparkle">
+      ✨ 💗 ✨
+    </div>
 
-<span>♡</span>
+    <h1>Hey beautiful!</h1>
 
-<span>♡</span>
+    <p>
+      Do you want to see your little surprise?
+    </p>
 
+    <button class="btn" onclick="go('s2')">
+      YES PLEASE 💗
+    </button>
+
+    <button class="btn alt" onclick="funnyNo()">
+      NO THANKS 😭
+    </button>
+
+    <p id="noText" class="small"></p>
+
+  </div>
 </div>
 
-<!-- PAGE 1 -->
 
-<section class="screen active" id="s1">
+<!-- BOUQUET -->
 
-<div class="pill">FOR TAVI ♥</div>
+<div id="s2" class="screen">
+  <div class="card">
 
-<div class="content fade">
+    <div class="bouquet">
+      💐
+    </div>
 
-<div class="cat">
+    <h1>For TAVI</h1>
 
-<div class="ear e1"></div>
+    <p>
+      A tiny bouquet made just for you.
+    </p>
 
-<div class="ear e2"></div>
+    <button class="btn" onclick="go('s3')">
+      OPEN IT 🌸
+    </button>
 
-<div class="head"></div>
-
-<div class="eye a"></div>
-
-<div class="eye b"></div>
-
-<div class="nose"></div>
-
-<div class="body"></div>
-
-<div class="bow">🎀</div>
-
-<div class="motion">〰</div>
-
+  </div>
 </div>
 
-<h1>Hey beautiful</h1>
 
-<div class="sub">
+<!-- LOADING -->
 
-Do you want to see your gift?
+<div id="s3" class="screen">
+  <div class="card">
 
+    <div class="loader"></div>
+
+    <h2>
+      Made just for you...
+    </h2>
+
+    <p>
+      Preparing all the cute stuff 💗
+    </p>
+
+  </div>
 </div>
 
-<div class="btnrow">
 
-<button class="btn"
+<!-- MAIN MENU -->
 
-onclick="go('s2')">
+<div id="s4" class="screen">
+  <div class="card">
 
-YES PLEASE
+    <div class="sparkle">
+      💗 🌸 💗
+    </div>
 
-</button>
+    <h1>
+      TAVI'S LITTLE WORLD
+    </h1>
 
-<button class="btn light"
+    <p>
+      Pick anything. There are more surprises inside.
+    </p>
 
-onclick="nope()">
+    <div class="grid">
 
-NO THANKS
+      <button class="option" onclick="go('s5')">
+        <span class="icon">💌</span>
+        Sweet Message
+      </button>
 
-</button>
+      <button class="option" onclick="go('s6')">
+        <span class="icon">🎀</span>
+        Bow Surprise
+      </button>
 
+      <button class="option" onclick="go('s7')">
+        <span class="icon">🌷</span>
+        Flower Garden
+      </button>
+
+      <button class="option" onclick="go('s10')">
+        <span class="icon">🧠</span>
+        TAVI Quiz
+      </button>
+
+      <button class="option" onclick="go('s11')">
+        <span class="icon">🃏</span>
+        Memory Game
+      </button>
+
+      <button class="option" onclick="go('s12')">
+        <span class="icon">💗</span>
+        Catch Hearts
+      </button>
+
+      <button class="option" onclick="go('s13')">
+        <span class="icon">😂</span>
+        Funny Mode
+      </button>
+
+      <button class="option" onclick="go('s14')">
+        <span class="icon">✨</span>
+        Compliment Box
+      </button>
+
+      <button class="option" onclick="go('s15')">
+        <span class="icon">🍀</span>
+        Lucky Message
+      </button>
+
+      <button class="option" onclick="go('s16')">
+        <span class="icon">🎁</span>
+        Final Surprise
+      </button>
+
+    </div>
+
+    <button class="btn" onclick="go('s17')">
+      🌸 MORE LITTLE THINGS
+    </button>
+
+  </div>
 </div>
 
-<div id="nope"
-
-class="small"
-
-style="margin-top:12px">
-
-</div>
-
-</div>
-
-</section>
-
-<!-- PAGE 2 -->
-
-<section class="screen" id="s2">
-
-<div class="content fade">
-
-<h2>A Bouquet Just for You</h2>
-
-<div class="bouquet-card">
-
-<div class="bouquet">
-
-💐
-
-</div>
-
-</div>
-
-<div class="card-caption">
-
-for TAVI
-
-</div>
-
-<div class="btnrow">
-
-<button class="btn"
-
-onclick="go('s3')">
-
-OPEN YOUR GIFT
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- PAGE 3 -->
-
-<section class="screen" id="s3">
-
-<div class="content fade">
-
-<div class="loading">
-
-Made just for you
-
-</div>
-
-<div class="sub">
-
-Preparing something special...
-
-</div>
-
-</div>
-
-</section>
-
-<!-- PAGE 4 -->
-
-<section class="screen" id="s4">
-
-<div class="content fade">
-
-<h2>Made just for you</h2>
-
-<div class="sub">
-
-A few little things, just for TAVI.
-
-</div>
-
-<div class="menu-grid">
-
-<!-- PHOTO OPTION REMOVED -->
-
-<button class="menu-card"
-
-onclick="go('s5')">
-
-<span class="ico">
-
-💌
-
-</span>
-
-</button>
-
-<button class="menu-card"
-
-onclick="go('s6')">
-
-<span class="ico">
-
-🎀
-
-</span>
-
-</button>
-
-<button class="menu-card"
-
-onclick="go('s7')">
-
-<span class="ico">
-
-🌹
-
-</span>
-
-</button>
-
-</div>
-
-<div class="small">
-
-Photo option removed ♥
-
-</div>
-
-</div>
-
-</section>
 
 <!-- MESSAGE -->
 
-<section class="screen" id="s5">
+<div id="s5" class="screen">
+  <div class="card">
 
-<div class="content fade">
+    <div class="icon">
+      💌
+    </div>
 
-<h2>A little message</h2>
+    <h2>
+      Sweet Message
+    </h2>
 
-<div class="letter">
+    <div class="message">
 
-<p>
+      TAVI, you are officially the owner
+      of today's tiny happiness package. 💗
 
-I just wanted to say this little page is made especially for you.
+      <br><br>
 
-</p>
+      Keep smiling, keep being yourself,
+      and remember that you deserve good moments.
 
-<p>
+    </div>
 
-You make ordinary moments feel special, and everything feels a little brighter when you are around.
+    <button class="btn" onclick="go('s4')">
+      BACK TO TAVI'S WORLD
+    </button>
 
-</p>
-
-<p>
-
-Thank you for being you and for every little memory we share.
-
-</p>
-
-<div class="signature">
-
-With all my love,<br>
-
-<b>TAVI</b> ♥
-
+  </div>
 </div>
 
-</div>
-
-<button class="btn"
-
-onclick="go('s8')">
-
-NEXT ♥
-
-</button>
-
-</div>
-
-</section>
 
 <!-- BOW -->
 
-<section class="screen" id="s6">
+<div id="s6" class="screen">
+  <div class="card">
 
-<div class="content fade">
+    <div class="icon">
+      🎀
+    </div>
 
-<h2>Just for you</h2>
+    <h2>
+      Bow Surprise
+    </h2>
 
-<div class="letter"
+    <p class="message">
 
-style="text-align:center">
+      🎁 You found the secret bow!
 
-<div style="font-size:95px">
+      <br><br>
 
-🎀
+      Inside this box:
+      100% certified cuteness.
 
+    </p>
+
+    <button class="btn" onclick="go('s4')">
+      OPEN ANOTHER THING
+    </button>
+
+  </div>
 </div>
 
-<p style="font-size:14px">
-
-A tiny gift wrapped with a lot of care.
-
-</p>
-
-<p style="font-size:12px">
-
-No photo upload. Just a simple little surprise.
-
-</p>
-
-</div>
-
-<button class="btn"
-
-onclick="go('s8')">
-
-NEXT ♥
-
-</button>
-
-</div>
-
-</section>
 
 <!-- FLOWER -->
 
-<section class="screen" id="s7">
+<div id="s7" class="screen">
+  <div class="card">
 
-<div class="content fade">
+    <div class="icon">
+      🌷🌸🌹
+    </div>
 
-<h2>One more flower</h2>
+    <h2>
+      Flower Garden
+    </h2>
 
-<div class="bouquet-card"
+    <p>
+      Choose a flower:
+    </p>
 
-style="height:280px">
+    <div class="grid">
 
-<div class="bouquet">
+      <button class="option" onclick="flower('🌷')">
+        🌷 Tulip
+      </button>
 
-🌹
+      <button class="option" onclick="flower('🌹')">
+        🌹 Rose
+      </button>
 
+      <button class="option" onclick="flower('🌸')">
+        🌸 Sakura
+      </button>
+
+      <button class="option" onclick="flower('🌻')">
+        🌻 Sunflower
+      </button>
+
+    </div>
+
+    <div id="flowerResult" class="result"></div>
+
+    <button class="btn" onclick="go('s4')">
+      BACK
+    </button>
+
+  </div>
 </div>
 
+
+<!-- QUIZ -->
+
+<div id="s10" class="screen">
+  <div class="card">
+
+    <div class="icon">
+      🧠
+    </div>
+
+    <h2>
+      TAVI Quiz
+    </h2>
+
+    <p>
+      What is the correct answer?
+    </p>
+
+    <div class="quiz">
+
+      <button class="btn alt" onclick="quiz(0)">
+        TAVI deserves happiness 💗
+      </button>
+
+      <button class="btn alt" onclick="quiz(1)">
+        TAVI deserves sadness 😭
+      </button>
+
+      <button class="btn alt" onclick="quiz(0)">
+        TAVI deserves flowers 🌸
+      </button>
+
+    </div>
+
+    <div id="quizResult" class="result"></div>
+
+    <button class="btn" onclick="go('s4')">
+      BACK
+    </button>
+
+  </div>
 </div>
 
-<div class="card-caption">
 
-for you, TAVI ♥
+<!-- MEMORY -->
 
+<div id="s11" class="screen">
+  <div class="card">
+
+    <div class="icon">
+      🃏
+    </div>
+
+    <h2>
+      Memory Match
+    </h2>
+
+    <p>
+      Match all the cute pairs.
+    </p>
+
+    <div id="memory" class="match"></div>
+
+    <div id="memoryResult" class="result"></div>
+
+    <button class="btn" onclick="startMemory()">
+      RESET GAME
+    </button>
+
+    <button class="btn alt" onclick="go('s4')">
+      BACK
+    </button>
+
+  </div>
 </div>
 
-<button class="btn"
 
-style="margin-top:18px"
+<!-- CATCH HEARTS -->
 
-onclick="go('s8')">
+<div id="s12" class="screen">
+  <div class="card">
 
-NEXT ♥
+    <div class="icon">
+      💗
+    </div>
 
-</button>
+    <h2>
+      Catch Hearts
+    </h2>
 
+    <p>
+      Click the floating hearts before they disappear!
+    </p>
+
+    <div class="game">
+
+      <button
+        class="btn"
+        id="heartBtn"
+        onclick="catchHeart()">
+        💗 CATCH ME
+      </button>
+
+      <div id="score">
+        Score: 0
+      </div>
+
+    </div>
+
+    <button class="btn" onclick="resetScore()">
+      RESET
+    </button>
+
+    <button class="btn alt" onclick="go('s4')">
+      BACK
+    </button>
+
+  </div>
 </div>
 
-</section>
 
-<!-- LAST SURPRISE -->
+<!-- FUNNY -->
 
-<section class="screen" id="s8">
+<div id="s13" class="screen">
+  <div class="card">
 
-<div class="content fade">
+    <div class="icon">
+      😂
+    </div>
 
-<div class="hello">
+    <h2>
+      Funny Mode
+    </h2>
 
-🎀
+    <div class="message" id="joke">
+      Click the button for a totally serious joke.
+    </div>
 
+    <button class="btn" onclick="joke()">
+      MAKE ME LAUGH 😂
+    </button>
+
+    <button class="btn alt" onclick="go('s4')">
+      BACK
+    </button>
+
+  </div>
 </div>
 
-<h2>
 
-One Last Surprise...
+<!-- COMPLIMENT -->
 
-</h2>
+<div id="s14" class="screen">
+  <div class="card">
 
-<div class="sub">
+    <div class="icon">
+      ✨
+    </div>
 
-Type your name to unlock the final page.
+    <h2>
+      Compliment Box
+    </h2>
 
+    <p>
+      Press the button to reveal one.
+    </p>
+
+    <div id="compliment" class="message">
+      ???
+    </div>
+
+    <button class="btn" onclick="compliment()">
+      OPEN BOX ✨
+    </button>
+
+    <button class="btn alt" onclick="go('s4')">
+      BACK
+    </button>
+
+  </div>
 </div>
 
-<div class="inputwrap">
 
-<input
+<!-- LUCKY -->
 
-id="name"
+<div id="s15" class="screen">
+  <div class="card">
 
-maxlength="20"
+    <div class="icon">
+      🍀
+    </div>
 
-placeholder="Your name">
+    <h2>
+      Lucky Message
+    </h2>
 
+    <div id="lucky" class="message">
+      Your lucky message is waiting...
+    </div>
+
+    <button class="btn" onclick="lucky()">
+      ROLL LUCKY MESSAGE 🍀
+    </button>
+
+    <button class="btn alt" onclick="go('s4')">
+      BACK
+    </button>
+
+  </div>
 </div>
 
-<button class="btn unlock"
 
-onclick="unlock()">
+<!-- FINAL -->
 
-UNLOCK ♥
+<div id="s16" class="screen">
+  <div class="card">
 
-</button>
+    <div class="final">
+      🎁
+    </div>
 
-<div id="err"
+    <h2>
+      One Last Surprise
+    </h2>
 
-class="small"
+    <p class="message">
 
-style="margin-top:10px">
+      TAVI, you reached the secret ending! 💗
 
+      <br><br>
+
+      ✨ Surprise unlocked ✨
+
+    </p>
+
+    <button class="btn" onclick="go('s17')">
+      KEEP GOING 🌸
+    </button>
+
+    <button class="btn alt" onclick="go('s4')">
+      BACK
+    </button>
+
+  </div>
 </div>
 
+
+<!-- MORE -->
+
+<div id="s17" class="screen">
+  <div class="card">
+
+    <div class="sparkle">
+      🌸 💗 🌸
+    </div>
+
+    <h2>
+      More Little Things
+    </h2>
+
+    <div class="message">
+
+      🎀 A virtual bow
+
+      <br>
+
+      🌷 A virtual flower
+
+      <br>
+
+      🍀 A little luck
+
+      <br>
+
+      😂 A terrible joke
+
+      <br>
+
+      💌 A sweet message
+
+      <br>
+
+      ✨ And a whole lot of TAVI energy
+
+    </div>
+
+    <button class="btn" onclick="go('s16')">
+      FINAL SURPRISE 🎁
+    </button>
+
+    <button class="btn alt" onclick="go('s4')">
+      MORE OPTIONS
+    </button>
+
+  </div>
 </div>
 
-</section>
-
-<!-- FUTURE PLANS -->
-
-<section class="screen" id="s9">
-
-<div class="content fade">
-
-<h2>
-
-Our Future Plans
-
-</h2>
-
-<div class="sub">
-
-Little moments waiting to become memories.
-
-</div>
-
-<div class="plans">
-
-<div class="plan">
-
-<div class="heart">
-
-♥
-
-</div>
-
-<div>
-
-<h3>
-
-More memories
-
-</h3>
-
-<p>
-
-Keep creating beautiful little moments together.
-
-</p>
-
-</div>
-
-</div>
-
-<div class="plan">
-
-<div class="heart">
-
-♡
-
-</div>
-
-<div>
-
-<h3>
-
-More smiles
-
-</h3>
-
-<p>
-
-Laugh more, enjoy more, and keep it simple.
-
-</p>
-
-</div>
-
-</div>
-
-<div class="plan">
-
-<div class="heart">
-
-♥
-
-</div>
-
-<div>
-
-<h3>
-
-Always special
-
-</h3>
-
-<p>
-
-Some people will always have a special place in your heart.
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-<button class="btn"
-
-onclick="go('s1')">
-
-HOME ♥
-
-</button>
-
-</div>
-
-</section>
-
-<button
-
-class="home"
-
-id="home"
-
-onclick="go('s1')">
-
-⌂ Home
-
-</button>
 
 <script>
 
 function go(id){
 
-document.querySelectorAll('.screen')
+  document
+    .querySelectorAll('.screen')
+    .forEach(s => s.classList.remove('active'));
 
-.forEach(s=>s.classList.remove('active'));
+  document
+    .getElementById(id)
+    .classList.add('active');
 
-const el=document.getElementById(id);
+  window.scrollTo(0,0);
 
-el.classList.add('active');
+  if(id === 's11'){
+    startMemory();
+  }
+}
 
-document.getElementById('home')
 
-.classList.toggle('show',id!=='s1');
+function funnyNo(){
 
-window.scrollTo({
+  const x = document.getElementById('noText');
 
-top:0,
-
-behavior:'smooth'
-
-});
-
-if(id==='s3'){
-
-setTimeout(()=>{
-
-go('s4');
-
-},1400);
+  x.textContent = [
+    "Are you sure? 😭",
+    "The button is getting nervous...",
+    "TAVI please reconsider 😂",
+    "Okay okay... one more chance? 💗"
+  ][Math.floor(Math.random()*4)];
 
 }
 
-}
 
-function nope(){
+function flower(x){
 
-document.getElementById('nope').textContent=
-
-'Nope 😭 Try YES PLEASE!';
-
-setTimeout(()=>{
-
-document.getElementById('nope').textContent='';
-
-},1800);
+  document.getElementById('flowerResult').textContent =
+    x + " has been added to TAVI's imaginary garden! 🌸";
 
 }
 
-function unlock(){
 
-const n=document
+function quiz(n){
 
-.getElementById('name')
-
-.value
-
-.trim();
-
-if(!n){
-
-document.getElementById('err')
-
-.textContent='Enter a name first ♥';
-
-return;
+  document.getElementById('quizResult').textContent =
+    n === 0
+      ? "CORRECT! Obviously. 😂💗"
+      : "Nope. Try again 😭";
 
 }
 
-if(n.toLowerCase()!=='tavi'){
 
-document.getElementById('err')
+const jokes = [
 
-.textContent='Try: TAVI ♥';
+  "Why did the flower blush? Because it saw TAVI. 🌸😂",
 
-return;
+  "Breaking news: TAVI has officially been detected being cute. 🚨😂",
+
+  "This website contains 0% boring content and 100% unnecessary sparkles. ✨",
+
+  "A cat walked into the gift box and refused to leave. 🐱",
+
+  "Scientists are still trying to calculate TAVI's smile level. 🧪😂"
+
+];
+
+
+function joke(){
+
+  document.getElementById('joke').textContent =
+    jokes[Math.floor(Math.random()*jokes.length)];
 
 }
 
-go('s9');
+
+const compliments = [
+
+  "You make ordinary moments feel a little brighter. ✨",
+
+  "Your energy deserves its own notification sound. 💗",
+
+  "Certified awesome. No further testing required. ✅",
+
+  "Someone ordered extra sunshine and apparently it was TAVI. ☀️",
+
+  "You passed the vibe check. 100/100. 🌸"
+
+];
+
+
+function compliment(){
+
+  document.getElementById('compliment').textContent =
+    compliments[Math.floor(Math.random()*compliments.length)];
 
 }
+
+
+const luckyMessages = [
+
+  "Lucky number: 7 🍀",
+
+  "Today's bonus: one unexpected smile. ✨",
+
+  "Lucky item: a pink flower. 🌸",
+
+  "Secret luck unlocked: good vibes only. 💗",
+
+  "Your next little moment might be your favorite one. 🍀"
+
+];
+
+
+function lucky(){
+
+  document.getElementById('lucky').textContent =
+    luckyMessages[Math.floor(Math.random()*luckyMessages.length)];
+
+}
+
+
+let score = 0;
+
+
+function catchHeart(){
+
+  score++;
+
+  document.getElementById('score').textContent =
+    "Score: " + score;
+
+  const b = document.getElementById('heartBtn');
+
+  b.style.transform =
+    `translate(${Math.random()*100-50}px,
+               ${Math.random()*80-40}px)`;
+
+  if(score >= 10){
+
+    document.getElementById('score').textContent =
+      "Score: 10+ — TAVI WON! 🏆💗";
+
+  }
+
+}
+
+
+function resetScore(){
+
+  score = 0;
+
+  document.getElementById('score').textContent =
+    "Score: 0";
+
+  document.getElementById('heartBtn').style.transform = "";
+
+}
+
+
+const symbols = [
+  "💗","🌸","🎀","🍀",
+  "💗","🌸","🎀","🍀"
+];
+
+let first = null;
+let lock = false;
+let matches = 0;
+
+
+function startMemory(){
+
+  first = null;
+  lock = false;
+  matches = 0;
+
+  const arr = [...symbols]
+    .sort(() => Math.random() - .5);
+
+  const box = document.getElementById('memory');
+
+  box.innerHTML = "";
+
+  arr.forEach((v,i)=>{
+
+    const b = document.createElement('button');
+
+    b.className = "tile";
+
+    b.textContent = v;
+
+    b.dataset.value = v;
+
+    b.onclick = () => flip(b);
+
+    box.appendChild(b);
+
+  });
+
+  document.getElementById('memoryResult').textContent = "";
+
+}
+
+
+function flip(b){
+
+  if(
+    lock ||
+    b.classList.contains("open") ||
+    b.classList.contains("done")
+  ){
+    return;
+  }
+
+  b.classList.add("open");
+
+  if(!first){
+
+    first = b;
+
+    return;
+
+  }
+
+  if(first.dataset.value === b.dataset.value){
+
+    first.classList.add("done");
+
+    b.classList.add("done");
+
+    first = null;
+
+    matches++;
+
+    if(matches === 4){
+
+      document.getElementById('memoryResult').textContent =
+        "You matched everything! 🎉";
+
+    }
+
+  }else{
+
+    lock = true;
+
+    setTimeout(()=>{
+
+      first.classList.remove("open");
+
+      b.classList.remove("open");
+
+      first = null;
+
+      lock = false;
+
+    },650);
+
+  }
+
+}
+
+
+setInterval(()=>{
+
+  const h = document.createElement("div");
+
+  h.className = "heart";
+
+  h.textContent =
+    ["💗","💕","🌸","✨"]
+    [Math.floor(Math.random()*4)];
+
+  h.style.left =
+    Math.random()*100 + "vw";
+
+  h.style.fontSize =
+    (15 + Math.random()*22) + "px";
+
+  document.body.appendChild(h);
+
+  setTimeout(
+    () => h.remove(),
+    5000
+  );
+
+},900);
 
 </script>
 
 </body>
-
 </html>
