@@ -1,1118 +1,474 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>TAVI — Little Surprise</title>
-
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;min-height:100vh;background:linear-gradient(135deg,#ffd9e8,#fff1f7 45%,#ffc7dc);color:#5b2340;overflow:hidden}
+button,input{font:inherit}button{cursor:pointer;border:0}
+.screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:24px;overflow:auto}
+.screen.active{display:flex}
+.card{width:min(440px,94vw);max-height:92vh;overflow:auto;background:rgba(255,255,255,.82);border:2px solid rgba(255,255,255,.8);border-radius:32px;padding:30px;box-shadow:0 20px 70px rgba(130,45,85,.22);text-align:center;backdrop-filter:blur(15px)}
+h1{font-size:34px;margin-bottom:10px}h2{font-size:27px;margin-bottom:10px}p{line-height:1.6}.small{font-size:13px;opacity:.72}
+.cat{font-size:85px;animation:bounce 1.8s infinite ease-in-out;margin-bottom:8px}
+@keyframes bounce{50%{transform:translateY(-9px) rotate(2deg)}}
+.btn{display:block;width:100%;margin:12px 0;padding:15px 18px;border-radius:18px;background:#ff5d99;color:white;font-weight:800;box-shadow:0 8px 22px rgba(255,93,153,.3);transition:.2s}
+.btn:hover{transform:translateY(-3px);filter:brightness(1.04)}
+.btn.alt{background:#fff;color:#d8477d;border:2px solid #ffc0d6}
+.btn:disabled{cursor:not-allowed;opacity:.5}
+.bouquet{font-size:130px;filter:drop-shadow(0 12px 18px #b94c78)}
+.loader{width:90px;height:90px;border:8px solid #ffd0e0;border-top-color:#ff4f91;border-radius:50%;margin:20px auto;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
+.option{min-height:120px;padding:20px;border-radius:24px;background:linear-gradient(145deg,#fff,#ffe5f0);border:2px solid #ffd0df;color:#702b4c;font-weight:800;box-shadow:0 8px 25px rgba(130,45,85,.1);transition:.2s}
+.option:hover{transform:scale(1.03) rotate(-1deg)}
+.icon{font-size:38px;display:block;margin-bottom:8px}
+.message{background:#fff;padding:20px;border-radius:20px;border:2px dashed #ff91b8;font-size:18px;line-height:1.7}
+.heart{position:fixed;bottom:-30px;pointer-events:none;animation:float 5s linear forwards;z-index:-1}
+@keyframes float{from{transform:translateY(0) rotate(0);opacity:1}to{transform:translateY(-110vh) rotate(360deg);opacity:0}}
+.match{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tile{aspect-ratio:1;border-radius:15px;background:#ff75a8;color:transparent;font-size:26px;font-weight:bold}
+.tile.open,.tile.done{background:white;color:#ff4f91}
+.quiz button{margin:7px 0}
+input{width:100%;padding:15px;border-radius:16px;border:2px solid #ffc2d6;outline:none;margin:10px 0;background:white;color:#5b2340}
+.result{font-weight:800;margin-top:10px;min-height:24px}
+.final{font-size:60px;animation:wiggle 1.2s infinite}
+@keyframes wiggle{50%{transform:rotate(8deg) scale(1.05)}}
+.sparkle{font-size:26px;letter-spacing:8px}
 
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  min-height:100vh;
-  background:linear-gradient(135deg,#ffd9e8,#fff1f7 45%,#ffc7dc);
-  color:#5b2340;
-  overflow:hidden;
-}
-
-button,input{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-  border:0;
-}
-
-.screen{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  overflow:auto;
-}
-
-.screen.active{
-  display:flex;
-}
-
-.card{
-  width:min(440px,94vw);
-  max-height:92vh;
-  overflow:auto;
-  background:rgba(255,255,255,.82);
-  border:2px solid rgba(255,255,255,.8);
-  border-radius:32px;
-  padding:30px;
-  box-shadow:0 20px 70px rgba(130,45,85,.22);
-  text-align:center;
-  backdrop-filter:blur(15px);
-}
-
-h1{
-  font-size:34px;
-  margin-bottom:10px;
-}
-
-h2{
-  font-size:27px;
-  margin-bottom:10px;
-}
-
-p{
-  line-height:1.6;
-}
-
-.small{
-  font-size:13px;
-  opacity:.72;
-}
-
-.cat{
-  font-size:85px;
-  animation:bounce 1.8s infinite ease-in-out;
-  margin-bottom:8px;
-}
-
-@keyframes bounce{
-  50%{
-    transform:translateY(-9px) rotate(2deg);
-  }
-}
-
-.btn{
-  display:block;
-  width:100%;
-  margin:12px 0;
-  padding:15px 18px;
-  border-radius:18px;
-  background:#ff5d99;
-  color:white;
-  font-weight:800;
-  box-shadow:0 8px 22px rgba(255,93,153,.3);
-  transition:.2s;
-}
-
-.btn:hover{
-  transform:translateY(-3px);
-  filter:brightness(1.04);
-}
-
-.btn.alt{
-  background:#fff;
-  color:#d8477d;
-  border:2px solid #ffc0d6;
-}
-
-.bouquet{
-  font-size:130px;
-  filter:drop-shadow(0 12px 18px #b94c78);
-}
-
-.loader{
-  width:90px;
-  height:90px;
-  border:8px solid #ffd0e0;
-  border-top-color:#ff4f91;
-  border-radius:50%;
-  margin:20px auto;
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-  to{
-    transform:rotate(360deg);
-  }
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-top:18px;
-}
-
-.option{
-  min-height:120px;
-  padding:20px;
-  border-radius:24px;
-  background:linear-gradient(145deg,#fff,#ffe5f0);
-  border:2px solid #ffd0df;
-  color:#702b4c;
-  font-weight:800;
-  box-shadow:0 8px 25px rgba(130,45,85,.1);
-  transition:.2s;
-}
-
-.option:hover{
-  transform:scale(1.03) rotate(-1deg);
-}
-
-.icon{
-  font-size:38px;
-  display:block;
-  margin-bottom:8px;
-}
-
-.message{
-  background:#fff;
-  padding:20px;
-  border-radius:20px;
-  border:2px dashed #ff91b8;
-  font-size:18px;
-  line-height:1.7;
-}
-
-.heart{
-  position:fixed;
-  bottom:-30px;
-  pointer-events:none;
-  animation:float 5s linear forwards;
-  z-index:-1;
-}
-
-@keyframes float{
-  from{
-    transform:translateY(0) rotate(0);
-    opacity:1;
-  }
-
-  to{
-    transform:translateY(-110vh) rotate(360deg);
-    opacity:0;
-  }
-}
-
-.match{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-}
-
-.tile{
-  aspect-ratio:1;
-  border-radius:15px;
-  background:#ff75a8;
-  color:transparent;
-  font-size:26px;
-  font-weight:bold;
-}
-
-.tile.open,
-.tile.done{
-  background:white;
-  color:#ff4f91;
-}
-
-.quiz button{
-  margin:7px 0;
-}
-
-input{
-  width:100%;
-  padding:15px;
-  border-radius:16px;
-  border:2px solid #ffc2d6;
-  outline:none;
-  margin:10px 0;
-  background:white;
-  color:#5b2340;
-}
-
-.result{
-  font-weight:800;
-  margin-top:10px;
-  min-height:24px;
-}
-
-.final{
-  font-size:60px;
-  animation:wiggle 1.2s infinite;
-}
-
-@keyframes wiggle{
-  50%{
-    transform:rotate(8deg) scale(1.05);
-  }
-}
-
-.sparkle{
-  font-size:26px;
-  letter-spacing:8px;
-}
+/* Bow game */
+.bow-arena{position:relative;height:170px;overflow:hidden;background:#ffe5f0;border:2px solid #ffc0d6;border-radius:20px;margin:18px 0}
+.bow-target{position:absolute;left:72%;top:54px;font-size:43px;line-height:1;transform:translateX(-50%);transition:left .38s ease,top .25s ease}
+.bow-arrow{position:absolute;left:8%;top:78px;font-size:32px;opacity:0;pointer-events:none}
+.bow-arrow.fly{animation:arrowFly .38s ease-out forwards}
+@keyframes arrowFly{0%{opacity:1;left:8%}100%{opacity:1;left:78%}}
+@media(max-width:380px){.card{padding:22px}h1{font-size:29px}.option{padding:14px;min-height:105px}}
 </style>
 </head>
-
 <body>
 
 <!-- WELCOME -->
 <div id="s1" class="screen active">
-  <div class="card">
-
-    <div class="cat">🐱</div>
-
-    <div class="sparkle">
-      ✨ 💗 ✨
-    </div>
-
-    <h1>Hey beautiful!</h1>
-
-    <p>
-      Do you want to see your little surprise?
-    </p>
-
-    <button class="btn" onclick="go('s2')">
-      YES PLEASE 💗
-    </button>
-
-    <button class="btn alt" onclick="funnyNo()">
-      NO THANKS 😭
-    </button>
-
-    <p id="noText" class="small"></p>
-
-  </div>
+<div class="card">
+<div class="cat">🐱</div>
+<div class="sparkle">✨ 💗 ✨</div>
+<h1>Hey beautiful!</h1>
+<p>Do you want to see your little surprise?</p>
+<button class="btn" onclick="go('s2')">YES PLEASE 💗</button>
+<button class="btn alt" onclick="funnyNo()">NO THANKS 😭</button>
+<p id="noText" class="small"></p>
 </div>
-
+</div>
 
 <!-- BOUQUET -->
 <div id="s2" class="screen">
-  <div class="card">
-
-    <div class="bouquet">
-      💐
-    </div>
-
-    <h1>For TAVI</h1>
-
-    <p>
-      A tiny bouquet made just for you.
-    </p>
-
-    <button class="btn" onclick="go('s3')">
-      OPEN IT 🌸
-    </button>
-
-  </div>
+<div class="card">
+<div class="bouquet">💐</div>
+<h1>For TAVI</h1>
+<p>A tiny bouquet made just for you.</p>
+<button class="btn" onclick="go('s3')">OPEN IT 🌸</button>
 </div>
-
+</div>
 
 <!-- LOADING -->
 <div id="s3" class="screen">
-  <div class="card">
-
-    <div class="loader"></div>
-
-    <h2>
-      Made just for you...
-    </h2>
-
-    <p>
-      Preparing all the cute stuff 💗
-    </p>
-
-  </div>
+<div class="card">
+<div class="loader"></div>
+<h2>Made just for you...</h2>
+<p>Preparing all the cute stuff 💗</p>
 </div>
-
+</div>
 
 <!-- MAIN MENU -->
 <div id="s4" class="screen">
-  <div class="card">
-
-    <div class="sparkle">
-      💗 🌸 💗
-    </div>
-
-    <h1>
-      TAVI'S LITTLE WORLD
-    </h1>
-
-    <p>
-      Pick anything. There are more surprises inside.
-    </p>
-
-    <div class="grid">
-
-      <button class="option" onclick="go('s5')">
-        <span class="icon">💌</span>
-        Sweet Message
-      </button>
-
-      <button class="option" onclick="go('s6')">
-        <span class="icon">🎀</span>
-        Bow Surprise
-      </button>
-
-      <button class="option" onclick="go('s7')">
-        <span class="icon">🌷</span>
-        Flower Garden
-      </button>
-
-      <button class="option" onclick="go('s10')">
-        <span class="icon">🧠</span>
-        TAVI Quiz
-      </button>
-
-      <button class="option" onclick="go('s11')">
-        <span class="icon">🃏</span>
-        Memory Game
-      </button>
-
-      <button class="option" onclick="go('s12')">
-        <span class="icon">💗</span>
-        Catch Hearts
-      </button>
-
-      <button class="option" onclick="go('s13')">
-        <span class="icon">😂</span>
-        Funny Mode
-      </button>
-
-      <button class="option" onclick="go('s14')">
-        <span class="icon">✨</span>
-        Compliment Box
-      </button>
-
-      <button class="option" onclick="go('s15')">
-        <span class="icon">🍀</span>
-        Lucky Message
-      </button>
-
-      <button class="option" onclick="go('s16')">
-        <span class="icon">🎁</span>
-        Final Surprise
-      </button>
-
-    </div>
-
-    <button class="btn" onclick="go('s17')">
-      🌸 MORE LITTLE THINGS
-    </button>
-
-  </div>
+<div class="card">
+<div class="sparkle">💗 🌸 💗</div>
+<h1>TAVI'S LITTLE WORLD</h1>
+<p>Pick anything. There are more surprises inside.</p>
+<div class="grid">
+<button class="option" onclick="go('s5')"><span class="icon">💌</span>Sweet Message</button>
+<button class="option" onclick="go('s6')"><span class="icon">🎀</span>Bow Surprise</button>
+<button class="option" onclick="go('s7')"><span class="icon">🌷</span>Flower Garden</button>
+<button class="option" onclick="go('s10')"><span class="icon">🧠</span>TAVI Quiz</button>
+<button class="option" onclick="go('s11')"><span class="icon">🃏</span>Memory Game</button>
+<button class="option" onclick="go('s12')"><span class="icon">💗</span>Catch Hearts</button>
+<button class="option" onclick="go('s13')"><span class="icon">😂</span>Funny Mode</button>
+<button class="option" onclick="go('s14')"><span class="icon">✨</span>Compliment Box</button>
+<button class="option" onclick="go('s15')"><span class="icon">🍀</span>Lucky Message</button>
+<button class="option" onclick="go('s16')"><span class="icon">🎁</span>Final Surprise</button>
 </div>
-
+<button class="btn" onclick="go('s17')">🌸 MORE LITTLE THINGS</button>
+</div>
+</div>
 
 <!-- MESSAGE -->
 <div id="s5" class="screen">
-  <div class="card">
-
-    <div class="icon">💌</div>
-
-    <h2>Sweet Message</h2>
-
-    <div class="message">
-
-      TAVI, you are officially the owner
-      of today's tiny happiness package. 💗
-
-      <br><br>
-
-      Keep smiling, keep being yourself,
-      and remember that you deserve good moments.
-
-    </div>
-
-    <button class="btn" onclick="go('s4')">
-      BACK TO TAVI'S WORLD
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">💌</div>
+<h2>Sweet Message</h2>
+<div class="message">
+TAVI, you are officially the owner of today's tiny happiness package. 💗
+<br><br>
+Keep smiling, keep being yourself, and remember that you deserve good moments.
+</div>
+<button class="btn" onclick="go('s4')">BACK TO TAVI'S WORLD</button>
+</div>
 </div>
 
-
-<!-- BOW -->
+<!-- BOW GAME -->
 <div id="s6" class="screen">
-  <div class="card">
-
-    <div class="icon">🎀</div>
-
-    <h2>Bow Surprise</h2>
-
-    <p class="message">
-
-      🎁 You found the secret bow!
-
-      <br><br>
-
-      Inside this box:
-      100% certified cuteness.
-
-    </p>
-
-    <button class="btn" onclick="go('s4')">
-      OPEN ANOTHER THING
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">🏹</div>
+<h2>Heart Archer</h2>
+<p>Press SHOOT to fire an arrow at the moving heart! 🎯</p>
+<div class="bow-arena">
+<div class="bow-arrow" id="bowArrow">➶</div>
+<div class="bow-target" id="bowTarget">💗</div>
 </div>
-
+<div id="bowScore" class="result">Score: 0 / 10</div>
+<div id="bowResult" class="result">Try to hit the heart 10 times!</div>
+<button class="btn" id="shootButton" onclick="shootHeart()">🏹 SHOOT!</button>
+<button class="btn alt" onclick="resetBow()">RESTART GAME</button>
+<button class="btn alt" onclick="go('s4')">BACK</button>
+</div>
+</div>
 
 <!-- FLOWER -->
 <div id="s7" class="screen">
-  <div class="card">
-
-    <div class="icon">
-      🌷🌸🌹
-    </div>
-
-    <h2>Flower Garden</h2>
-
-    <p>
-      Choose a flower:
-    </p>
-
-    <div class="grid">
-
-      <button class="option" onclick="flower('🌷')">
-        🌷 Tulip
-      </button>
-
-      <button class="option" onclick="flower('🌹')">
-        🌹 Rose
-      </button>
-
-      <button class="option" onclick="flower('🌸')">
-        🌸 Sakura
-      </button>
-
-      <button class="option" onclick="flower('🌻')">
-        🌻 Sunflower
-      </button>
-
-    </div>
-
-    <div id="flowerResult" class="result"></div>
-
-    <button class="btn" onclick="go('s4')">
-      BACK
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">🌷🌸🌹</div>
+<h2>Flower Garden</h2>
+<p>Choose a flower:</p>
+<div class="grid">
+<button class="option" onclick="flower('🌷')">🌷 Tulip</button>
+<button class="option" onclick="flower('🌹')">🌹 Rose</button>
+<button class="option" onclick="flower('🌸')">🌸 Sakura</button>
+<button class="option" onclick="flower('🌻')">🌻 Sunflower</button>
 </div>
-
+<div id="flowerResult" class="result"></div>
+<button class="btn" onclick="go('s4')">BACK</button>
+</div>
+</div>
 
 <!-- QUIZ -->
 <div id="s10" class="screen">
-  <div class="card">
-
-    <div class="icon">🧠</div>
-
-    <h2>TAVI Quiz</h2>
-
-    <p>
-      What is the correct answer?
-    </p>
-
-    <div class="quiz">
-
-      <button class="btn alt" onclick="quiz(0)">
-        TAVI deserves happiness 💗
-      </button>
-
-      <button class="btn alt" onclick="quiz(1)">
-        TAVI deserves sadness 😭
-      </button>
-
-      <button class="btn alt" onclick="quiz(0)">
-        TAVI deserves flowers 🌸
-      </button>
-
-    </div>
-
-    <div id="quizResult" class="result"></div>
-
-    <button class="btn" onclick="go('s4')">
-      BACK
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">🧠</div>
+<h2>TAVI Quiz</h2>
+<p>Which statements are correct?</p>
+<div class="quiz">
+<button class="btn alt" onclick="quiz(1)">TAVI deserves happiness 💗</button>
+<button class="btn alt" onclick="quiz(0)">TAVI deserves sadness 😭</button>
+<button class="btn alt" onclick="quiz(1)">TAVI deserves flowers 🌸</button>
+</div>
+<div id="quizResult" class="result"></div>
+<button class="btn" onclick="go('s4')">BACK</button>
+</div>
 </div>
 
-
-<!-- MEMORY -->
+<!-- MEMORY GAME -->
 <div id="s11" class="screen">
-  <div class="card">
-
-    <div class="icon">🃏</div>
-
-    <h2>Memory Match</h2>
-
-    <p>
-      Match all the cute pairs.
-    </p>
-
-    <div id="memory" class="match"></div>
-
-    <div id="memoryResult" class="result"></div>
-
-    <button class="btn" onclick="startMemory()">
-      RESET GAME
-    </button>
-
-    <button class="btn alt" onclick="go('s4')">
-      BACK
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">🧠</div>
+<h2>Memory Match</h2>
+<p id="memoryInstruction">Memorize the emojis! 👀</p>
+<div id="memory" class="match"></div>
+<div id="memoryResult" class="result"></div>
+<button class="btn" onclick="startMemory()">RESTART GAME</button>
+<button class="btn alt" onclick="go('s4')">BACK</button>
 </div>
-
+</div>
 
 <!-- CATCH HEARTS -->
 <div id="s12" class="screen">
-  <div class="card">
-
-    <div class="icon">💗</div>
-
-    <h2>Catch Hearts</h2>
-
-    <p>
-      Click the floating hearts before they disappear!
-    </p>
-
-    <div class="game">
-
-      <button
-        class="btn"
-        id="heartBtn"
-        onclick="catchHeart()">
-        💗 CATCH ME
-      </button>
-
-      <div id="score">
-        Score: 0
-      </div>
-
-    </div>
-
-    <button class="btn" onclick="resetScore()">
-      RESET
-    </button>
-
-    <button class="btn alt" onclick="go('s4')">
-      BACK
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">💗</div>
+<h2>Catch Hearts</h2>
+<p>Click the floating hearts before they disappear!</p>
+<div class="game">
+<button class="btn" id="heartBtn" onclick="catchHeart()">💗 CATCH ME</button>
+<div id="score">Score: 0</div>
 </div>
-
+<button class="btn" onclick="resetScore()">RESET</button>
+<button class="btn alt" onclick="go('s4')">BACK</button>
+</div>
+</div>
 
 <!-- FUNNY -->
 <div id="s13" class="screen">
-  <div class="card">
-
-    <div class="icon">😂</div>
-
-    <h2>Funny Mode</h2>
-
-    <div class="message" id="joke">
-      Click the button for a totally serious joke.
-    </div>
-
-    <button class="btn" onclick="joke()">
-      MAKE ME LAUGH 😂
-    </button>
-
-    <button class="btn alt" onclick="go('s4')">
-      BACK
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">😂</div>
+<h2>Funny Mode</h2>
+<div class="message" id="joke">Click the button for a totally serious joke.</div>
+<button class="btn" onclick="joke()">MAKE ME LAUGH 😂</button>
+<button class="btn alt" onclick="go('s4')">BACK</button>
 </div>
-
+</div>
 
 <!-- COMPLIMENT -->
 <div id="s14" class="screen">
-  <div class="card">
-
-    <div class="icon">✨</div>
-
-    <h2>Compliment Box</h2>
-
-    <p>
-      Press the button to reveal one.
-    </p>
-
-    <div id="compliment" class="message">
-      ???
-    </div>
-
-    <button class="btn" onclick="compliment()">
-      OPEN BOX ✨
-    </button>
-
-    <button class="btn alt" onclick="go('s4')">
-      BACK
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">✨</div>
+<h2>Compliment Box</h2>
+<p>Press the button to reveal one.</p>
+<div id="compliment" class="message">???</div>
+<button class="btn" onclick="compliment()">OPEN BOX ✨</button>
+<button class="btn alt" onclick="go('s4')">BACK</button>
 </div>
-
+</div>
 
 <!-- LUCKY -->
 <div id="s15" class="screen">
-  <div class="card">
-
-    <div class="icon">🍀</div>
-
-    <h2>Lucky Message</h2>
-
-    <div id="lucky" class="message">
-      Your lucky message is waiting...
-    </div>
-
-    <button class="btn" onclick="lucky()">
-      ROLL LUCKY MESSAGE 🍀
-    </button>
-
-    <button class="btn alt" onclick="go('s4')">
-      BACK
-    </button>
-
-  </div>
+<div class="card">
+<div class="icon">🍀</div>
+<h2>Lucky Message</h2>
+<div id="lucky" class="message">Your lucky message is waiting...</div>
+<button class="btn" onclick="lucky()">ROLL LUCKY MESSAGE 🍀</button>
+<button class="btn alt" onclick="go('s4')">BACK</button>
 </div>
-
+</div>
 
 <!-- FINAL -->
 <div id="s16" class="screen">
-  <div class="card">
-
-    <div class="final">
-      🎁
-    </div>
-
-    <h2>
-      One Last Surprise
-    </h2>
-
-    <p class="message">
-
-      TAVI, you reached the secret ending! 💗
-
-      <br><br>
-
-      ✨ Surprise unlocked ✨
-
-    </p>
-
-    <button class="btn" onclick="go('s17')">
-      KEEP GOING 🌸
-    </button>
-
-    <button class="btn alt" onclick="go('s4')">
-      BACK
-    </button>
-
-  </div>
+<div class="card">
+<div class="final">🎁</div>
+<h2>One Last Surprise</h2>
+<p class="message">
+TAVI, you reached the secret ending! 💗
+<br><br>
+✨ Surprise unlocked ✨
+</p>
+<button class="btn" onclick="go('s17')">KEEP GOING 🌸</button>
+<button class="btn alt" onclick="go('s4')">BACK</button>
 </div>
-
+</div>
 
 <!-- MORE -->
 <div id="s17" class="screen">
-  <div class="card">
-
-    <div class="sparkle">
-      🌸 💗 🌸
-    </div>
-
-    <h2>
-      More Little Things
-    </h2>
-
-    <div class="message">
-
-      🎀 A virtual bow
-
-      <br>
-
-      🌷 A virtual flower
-
-      <br>
-
-      🍀 A little luck
-
-      <br>
-
-      😂 A terrible joke
-
-      <br>
-
-      💌 A sweet message
-
-      <br>
-
-      ✨ And a whole lot of TAVI energy
-
-    </div>
-
-    <button class="btn" onclick="go('s16')">
-      FINAL SURPRISE 🎁
-    </button>
-
-    <button class="btn alt" onclick="go('s4')">
-      MORE OPTIONS
-    </button>
-
-  </div>
+<div class="card">
+<div class="sparkle">🌸 💗 🌸</div>
+<h2>More Little Things</h2>
+<div class="message">
+🎀 A virtual bow<br>
+🌷 A virtual flower<br>
+🍀 A little luck<br>
+😂 A terrible joke<br>
+💌 A sweet message<br>
+✨ And a whole lot of TAVI energy
+</div>
+<button class="btn" onclick="go('s16')">FINAL SURPRISE 🎁</button>
+<button class="btn alt" onclick="go('s4')">MORE OPTIONS</button>
+</div>
 </div>
 
-
 <script>
-
 /* PAGE NAVIGATION */
-
 function go(id){
-
-  document
-    .querySelectorAll('.screen')
-    .forEach(screen => {
-      screen.classList.remove('active');
-    });
-
-  document
-    .getElementById(id)
-    .classList.add('active');
-
-  window.scrollTo(0,0);
-
-
-  /* FIXED LOADING TIME */
-
-  if(id === 's3'){
-
-    setTimeout(() => {
-      go('s4');
-    },1500);
-
-  }
-
-
-  /* START MEMORY GAME */
-
-  if(id === 's11'){
-    startMemory();
-  }
-
+document.querySelectorAll('.screen').forEach(screen=>screen.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+window.scrollTo(0,0);
+if(id==='s3')setTimeout(()=>go('s4'),1500);
+if(id==='s11')startMemory();
 }
 
-
-/* NO THANKS BUTTON */
-
+/* NO THANKS */
 function funnyNo(){
-
-  const text = document.getElementById('noText');
-
-  const messages = [
-
-    "Are you sure? 😭",
-
-    "The button is getting nervous...",
-
-    "TAVI please reconsider 😂",
-
-    "Okay okay... one more chance? 💗"
-
-  ];
-
-  text.textContent =
-    messages[Math.floor(Math.random()*messages.length)];
-
+const messages=[
+"Are you sure? 😭",
+"The button is getting nervous...",
+"TAVI please reconsider 😂",
+"Okay okay... one more chance? 💗"
+];
+document.getElementById('noText').textContent=messages[Math.floor(Math.random()*messages.length)];
 }
-
 
 /* FLOWERS */
-
 function flower(type){
-
-  document.getElementById('flowerResult').textContent =
-    type +
-    " has been added to TAVI's imaginary garden! 🌸";
-
+document.getElementById('flowerResult').textContent=type+" has been added to TAVI's imaginary garden! 🌸";
 }
 
-
-/* QUIZ */
-
+/* QUIZ: TWO CORRECT, ONE INCORRECT */
 function quiz(answer){
-
-  document.getElementById('quizResult').textContent =
-    answer === 0
-      ? "CORRECT! Obviously. 😂💗"
-      : "Nope. Try again 😭";
-
+document.getElementById('quizResult').textContent=
+answer===1?"CORRECT! Obviously. 😂💗":"Nope. Try again 😭";
 }
-
 
 /* FUNNY MODE */
-
-const jokes = [
-
-  "Why did the flower blush? Because it saw TAVI. 🌸😂",
-
-  "Breaking news: TAVI has officially been detected being cute. 🚨😂",
-
-  "This website contains 0% boring content and 100% unnecessary sparkles. ✨",
-
-  "A cat walked into the gift box and refused to leave. 🐱",
-
-  "Scientists are still trying to calculate TAVI's smile level. 🧪😂"
-
+const jokes=[
+"Why did the flower blush? Because it saw TAVI. 🌸😂",
+"Breaking news: TAVI has officially been detected being cute. 🚨😂",
+"This website contains 0% boring content and 100% unnecessary sparkles. ✨",
+"A cat walked into the gift box and refused to leave. 🐱",
+"Scientists are still trying to calculate TAVI's smile level. 🧪😂"
 ];
-
-
 function joke(){
-
-  document.getElementById('joke').textContent =
-    jokes[Math.floor(Math.random()*jokes.length)];
-
+document.getElementById('joke').textContent=jokes[Math.floor(Math.random()*jokes.length)];
 }
-
 
 /* COMPLIMENT BOX */
-
-const compliments = [
-
-  "You make ordinary moments feel a little brighter. ✨",
-
-  "Your energy deserves its own notification sound. 💗",
-
-  "Certified awesome. No further testing required. ✅",
-
-  "Someone ordered extra sunshine and apparently it was TAVI. ☀️",
-
-  "You passed the vibe check. 100/100. 🌸"
-
+const compliments=[
+"You make ordinary moments feel a little brighter. ✨",
+"Your energy deserves its own notification sound. 💗",
+"Certified awesome. No further testing required. ✅",
+"Someone ordered extra sunshine and apparently it was TAVI. ☀️",
+"You passed the vibe check. 100/100. 🌸"
 ];
-
-
 function compliment(){
-
-  document.getElementById('compliment').textContent =
-    compliments[Math.floor(Math.random()*compliments.length)];
-
+document.getElementById('compliment').textContent=compliments[Math.floor(Math.random()*compliments.length)];
 }
-
 
 /* LUCKY MESSAGE */
-
-const luckyMessages = [
-
-  "Lucky number: 7 🍀",
-
-  "Today's bonus: one unexpected smile. ✨",
-
-  "Lucky item: a pink flower. 🌸",
-
-  "Secret luck unlocked: good vibes only. 💗",
-
-  "Your next little moment might be your favorite one. 🍀"
-
+const luckyMessages=[
+"Lucky number: 7 🍀",
+"Today's bonus: one unexpected smile. ✨",
+"Lucky item: a pink flower. 🌸",
+"Secret luck unlocked: good vibes only. 💗",
+"Your next little moment might be your favorite one. 🍀"
 ];
-
-
 function lucky(){
-
-  document.getElementById('lucky').textContent =
-    luckyMessages[Math.floor(Math.random()*luckyMessages.length)];
-
+document.getElementById('lucky').textContent=luckyMessages[Math.floor(Math.random()*luckyMessages.length)];
 }
-
 
 /* CATCH HEARTS */
-
-let score = 0;
-
-
+let score=0;
 function catchHeart(){
-
-  score++;
-
-  document.getElementById('score').textContent =
-    "Score: " + score;
-
-  const button =
-    document.getElementById('heartBtn');
-
-  button.style.transform =
-    `translate(
-      ${Math.random()*100-50}px,
-      ${Math.random()*80-40}px
-    )`;
-
-  if(score >= 10){
-
-    document.getElementById('score').textContent =
-      "Score: 10+ — TAVI WON! 🏆💗";
-
-  }
-
+score++;
+document.getElementById('score').textContent="Score: "+score;
+const button=document.getElementById('heartBtn');
+button.style.transform=`translate(${Math.random()*100-50}px,${Math.random()*80-40}px)`;
+if(score>=10)document.getElementById('score').textContent="Score: 10+ — TAVI WON! 🏆💗";
 }
-
-
 function resetScore(){
-
-  score = 0;
-
-  document.getElementById('score').textContent =
-    "Score: 0";
-
-  document.getElementById('heartBtn').style.transform = "";
-
+score=0;
+document.getElementById('score').textContent="Score: 0";
+document.getElementById('heartBtn').style.transform="";
 }
 
-
-/* MEMORY GAME */
-
-const symbols = [
-  "💗",
-  "🌸",
-  "🎀",
-  "🍀",
-  "💗",
-  "🌸",
-  "🎀",
-  "🍀"
-];
-
-let first = null;
-let lock = false;
-let matches = 0;
-
+/* MEMORY GAME: SHOW EMOJIS, THEN HIDE */
+const symbols=["💗","🌸","🎀","🍀","💗","🌸","🎀","🍀"];
+let first=null,lock=false,matches=0,previewing=false,memoryTimer=null;
 
 function startMemory(){
+if(memoryTimer)clearTimeout(memoryTimer);
+first=null;lock=true;matches=0;previewing=true;
+const box=document.getElementById('memory');
+box.innerHTML="";
+document.getElementById('memoryResult').textContent="";
+document.getElementById('memoryInstruction').textContent="Memorize the emojis! 👀";
 
-  first = null;
-  lock = false;
-  matches = 0;
+const shuffled=[...symbols].sort(()=>Math.random()-0.5);
+shuffled.forEach(symbol=>{
+const tile=document.createElement('button');
+tile.className="tile open";
+tile.textContent=symbol;
+tile.dataset.value=symbol;
+tile.onclick=()=>flip(tile);
+box.appendChild(tile);
+});
 
-  const shuffled =
-    [...symbols].sort(
-      () => Math.random() - 0.5
-    );
-
-  const box =
-    document.getElementById('memory');
-
-  box.innerHTML = "";
-
-  document.getElementById('memoryResult').textContent = "";
-
-  shuffled.forEach(symbol => {
-
-    const button =
-      document.createElement('button');
-
-    button.className = "tile";
-
-    button.textContent = symbol;
-
-    button.dataset.value = symbol;
-
-    button.onclick = () => flip(button);
-
-    box.appendChild(button);
-
-  });
-
+memoryTimer=setTimeout(()=>{
+document.querySelectorAll('#memory .tile').forEach(tile=>tile.classList.remove('open'));
+previewing=false;lock=false;
+document.getElementById('memoryInstruction').textContent="Now match all the pairs! 💗";
+memoryTimer=null;
+},3000);
 }
 
+function flip(tile){
+if(lock||previewing||tile.classList.contains('open')||tile.classList.contains('done'))return;
+tile.classList.add('open');
+if(!first){first=tile;return;}
 
-function flip(button){
-
-  if(
-    lock ||
-    button.classList.contains("open") ||
-    button.classList.contains("done")
-  ){
-    return;
-  }
-
-  button.classList.add("open");
-
-  if(!first){
-
-    first = button;
-
-    return;
-
-  }
-
-  if(first.dataset.value === button.dataset.value){
-
-    first.classList.add("done");
-
-    button.classList.add("done");
-
-    first = null;
-
-    matches++;
-
-    if(matches === 4){
-
-      document.getElementById('memoryResult').textContent =
-        "You matched everything! 🎉";
-
-    }
-
-  }
-
-  else{
-
-    lock = true;
-
-    setTimeout(() => {
-
-      first.classList.remove("open");
-
-      button.classList.remove("open");
-
-      first = null;
-
-      lock = false;
-
-    },650);
-
-  }
-
+if(first.dataset.value===tile.dataset.value){
+first.classList.add('done');
+tile.classList.add('done');
+first=null;
+matches++;
+if(matches===4){
+document.getElementById('memoryResult').textContent="You matched everything! 🎉🏆";
+document.getElementById('memoryInstruction').textContent="Amazing memory! You won! 💗";
+}
+}else{
+lock=true;
+const previous=first;
+setTimeout(()=>{
+previous.classList.remove('open');
+tile.classList.remove('open');
+first=null;
+lock=false;
+},800);
+}
 }
 
+/* BOW GAME */
+let bowScore=0,bowBusy=false;
+let bowTimer=null;
+
+function moveBowTarget(){
+const target=document.getElementById('bowTarget');
+target.style.left=(15+Math.random()*70)+'%';
+target.style.top=(10+Math.random()*105)+'px';
+}
+
+function shootHeart(){
+if(bowBusy||bowScore>=10)return;
+bowBusy=true;
+
+const arrow=document.getElementById('bowArrow');
+const target=document.getElementById('bowTarget');
+const result=document.getElementById('bowResult');
+const shootButton=document.getElementById('shootButton');
+
+shootButton.disabled=true;
+arrow.classList.remove('fly');
+void arrow.offsetWidth;
+arrow.classList.add('fly');
+
+bowTimer=setTimeout(()=>{
+bowScore++;
+document.getElementById('bowScore').textContent="Score: "+bowScore+" / 10";
+result.textContent="HIT! Lovely shot! 💘";
+target.textContent=["💗","💖","💕","💘","❤️"][Math.floor(Math.random()*5)];
+
+if(bowScore>=10){
+result.textContent="PERFECT ARCHER! YOU WON! 🏆💗";
+}else{
+moveBowTarget();
+}
+arrow.classList.remove('fly');
+bowBusy=false;
+shootButton.disabled=bowScore>=10;
+bowTimer=null;
+},380);
+}
+
+function resetBow(){
+if(bowTimer)clearTimeout(bowTimer);
+bowTimer=null;
+bowScore=0;
+bowBusy=false;
+document.getElementById('bowScore').textContent="Score: 0 / 10";
+document.getElementById('bowResult').textContent="Try to hit the heart 10 times!";
+document.getElementById('bowTarget').textContent="💗";
+document.getElementById('bowTarget').style.left="72%";
+document.getElementById('bowTarget').style.top="54px";
+document.getElementById('bowArrow').classList.remove('fly');
+document.getElementById('shootButton').disabled=false;
+}
 
 /* FLOATING HEARTS */
-
-setInterval(() => {
-
-  const heart =
-    document.createElement("div");
-
-  heart.className = "heart";
-
-  heart.textContent =
-    ["💗","💕","🌸","✨"]
-    [Math.floor(Math.random()*4)];
-
-  heart.style.left =
-    Math.random()*100 + "vw";
-
-  heart.style.fontSize =
-    (15 + Math.random()*22) + "px";
-
-  document.body.appendChild(heart);
-
-  setTimeout(
-    () => heart.remove(),
-    5000
-  );
-
+setInterval(()=>{
+const heart=document.createElement("div");
+heart.className="heart";
+heart.textContent=["💗","💕","🌸","✨"][Math.floor(Math.random()*4)];
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(15+Math.random()*22)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),5000);
 },900);
-
 </script>
-
 </body>
 </html>
